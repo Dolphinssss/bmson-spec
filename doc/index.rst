@@ -2,7 +2,7 @@
 bmson format specification
 ==========================
 
-Version 1.0.0-beta (2015/12/26)
+Version 1.0.1-beta (2017/04/27)
 
 Links
 =====
@@ -11,7 +11,7 @@ Links
   https://bmson.nekokan.dyndns.info/
 - how_to_bmson (Japanese):
   http://www40.atwiki.jp/laser_bm/pages/110.html
-- #bmson Creaion Notes (English):
+- #bmson Creation Notes (English):
   https://docs.google.com/document/d/1gQKPWApeL03aO09-II7slxTeuvm3HO_FmY1D4chRvOQ
 
 General
@@ -49,22 +49,23 @@ The format follows `Web IDL (Second Edition)`_
 
   // header information
   dictionary BmsonInfo {
-      DOMString     title;                 // self-explanatory
-      DOMString     subtitle = "";         // self-explanatory
-      DOMString     artist;                // self-explanatory
-      DOMString[]?  subartists = [];       // ["key:value"]
-      DOMString     genre;                 // self-explanatory
-      DOMString     mode_hint = "beat-7k"; // layout hints, e.g. "beat-7k", "popn-5k", "generic-nkeys"
-      DOMString     chart_name;            // e.g. "HYPER", "FOUR DIMENSIONS"
-      unsigned long level;                 // self-explanatory
-      double        init_bpm;              // self-explanatory
-      double        judge_rank = 100;      // relative judge width
-      double        total = 100;           // relative lifebar gain
-      DOMString?    back_image;            // background image filename
-      DOMString?    eyecatch_image;        // eyecatch image filename
-      DOMString?    banner_image;          // banner image filename
-      DOMString?    preview_music;         // preview music filename
-      unsigned long resolution = 240;      // pulses per quarter note
+      DOMString      title;                 // self-explanatory
+      DOMString      subtitle = "";         // self-explanatory
+      DOMString      artist;                // self-explanatory
+      DOMString[]?   subartists = [];       // ["key:value"]
+      DOMString      genre;                 // self-explanatory
+      DOMString      mode_hint = "beat-7k"; // layout hints, e.g. "beat-7k", "popn-5k", "generic-nkeys"
+      DOMString      chart_name;            // e.g. "HYPER", "FOUR DIMENSIONS"
+      unsigned long  level;                 // self-explanatory
+      double         init_bpm;              // self-explanatory
+      double         judge_rank = 100;      // relative judge width
+      double         total = 100;           // relative lifebar gain
+      DOMString?     back_image;            // background image filename
+      DOMString?     eyecatch_image;        // eyecatch image filename
+      DOMString?     banner_image;          // banner image filename
+      DOMString?     preview_music;         // preview music filename
+      unsigned long  resolution = 240;      // pulses per quarter note
+      unsigned short longnote_type;         // determine longnote type, e.g. LN, CN, HCN.
   }
 
   // bar-line event
@@ -123,6 +124,15 @@ The format follows `Web IDL (Second Edition)`_
 
 Changelog
 =========
+
+1.0.1
+------------------
+
+Non-Breaking Changes
+~~~~~~~~~~~~~~~~~~~~
+- Add fields
+
+  - ``BMSInfo.longnote_type``
 
 1.0.0 (from 0.21)
 -----------------
@@ -427,6 +437,17 @@ resolution :: unsigned long
   - If negative, take the absolute value.
 
 - For detailed information, see `Terminologies/Beat Resolution`_.
+
+longnote\_type :: unsigned short
+  A value to determine longnote type.
+  
+  The officially supported values are 0 (LN), 1 (CN) or 2 (HCN)
+  
+  The default value is 0.
+  
+  - Long Note (LN) is a long note without judgement at the end of the note. You may press the key as longer than the note lasts.
+  - Charge Note (CN) is a long note with judgement at the end of the note. The player must release the note at the end or else it will count as a miss.
+  - Hell Charge Note (HCN) is the same as a Charge Note, however gauge is constantly replenished if the player successfully presses the key, and if the player misses he is allowed to repress the key. Gauge is also constantly depleted for the duration the player does NOT press the key.
 
 .. _`Terminologies/Beat Resolution`: `Beat Resolution`_
 
